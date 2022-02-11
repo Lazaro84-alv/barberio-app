@@ -5,6 +5,8 @@ const Stack = createNativeStackNavigator()
 
 export default () => {
     <Stack.Navigator>
-    
+        <Stack.Screen name="Preload" component={Preload} />
+        <Stack.Screen name="Preload" component={SignIn} />
+        <Stack.Screen name="Preload" component={SingUp} />
     </Stack.Navigator>
 }
