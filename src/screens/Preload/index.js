@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { Container, LoadingIcon } from './styles'
-import { AsyncStorage } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native'
 
 import BarberLogo from '../../assets/barber.svg'
