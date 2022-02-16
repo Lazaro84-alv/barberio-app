@@ -3,22 +3,45 @@ import { Text } from 'react-native'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import Swiper from 'react-native-swiper'
 
+import Stars from '../../components/Stars'
+
+import FavoriteIcon from '../../assets/favorite.svg'
+import BackIcon from '../../assets/back.svg'
+
+
 import { 
     Container,
     Scroller,
+    PageBody,
+    BackButton,
+    LoadingIcon,
+
     SwipeDot,
     SwipeDotActive,
     SwipeItem,
     SwipeImage,
     FakeSwiper,
-    PageBody,
+
     UserInfoArea,
+    UserAvatar,
+    UserInfo,
+    UserInfoName,
+    UserFavButton,
+    
     ServiceArea,
+    ServicesTitle,
+    ServiceItem,
+    ServiceInfo,
+    ServiceName,
+    ServicePrice,
+    ServiceChooseButton,
+    ServiceChooseBtnText,
+
     TestimonialArea
 } from './styles'
 
 import Api from '../../Api'
-import Stars from '../../components/Stars'
+
 
 export default () => {
     const navigation = useNavigation()
@@ -48,6 +71,11 @@ export default () => {
         getBarberInfo()
     }, [])
 
+    const handleBackButton = () => {
+        navigation.goBack()
+
+    }
+
     return (
         <Container>
             <Scroller>
@@ -70,19 +98,45 @@ export default () => {
                 }
                 <PageBody>
                     <UserInfoArea>
-                        <UserAvatar />
+                        <UserAvatar source={{uri:userInfo.avatar}} /> 
                         <UserInfo>
                             <UserInfoName>{userInfo.name}</UserInfoName>
+                            <Stars stars={userInfo.stars} showNumber={true} />
                         </UserInfo>
+                        <UserFavButton>
+                            <FavoriteIcon width="24" heigth="24" fill="#FF0000" />
+                        </UserFavButton>
                     </UserInfoArea>
-                    <ServiceArea>
-                    
-                    </ServiceArea>
+
+                    {loading &&
+                        <LoadingIcon size="large" color="#000000" />
+                    }
+
+                    {userInfo.services &&  
+                        <ServiceArea>
+                            <ServicesTitle>Lista de serviços</ServicesTitle>
+
+                            {userInfo.services.map((item, key)=>(
+                                <ServiceItem key={key}>
+                                    <ServiceInfo>
+                                        <ServiceName>{item.name}</ServiceName>
+                                        <ServicePrice>R$ {item.price}</ServicePrice>
+                                    </ServiceInfo>
+                                    <ServiceChooseButton>
+                                        <ServiceChooseBtnText>Agendar</ServiceChooseBtnText>
+                                    </ServiceChooseButton>
+                                </ServiceItem>
+                            ))}
+                        </ServiceArea>
+                    }
                     <TestimonialArea>
                     
                     </TestimonialArea>
                 </PageBody>
             </Scroller>
+            <BackButton onPress={handleBackButton}>
+                <BackIcon width="44" heigth="44" fill="#FFFFFF" />
+            </BackButton>
         </Container>
     )
 }
