@@ -5,6 +5,7 @@ import Swiper from 'react-native-swiper'
 
 import Stars from '../../components/Stars'
 
+import FavoriteFullIcon from '../../assets/favorite_full.svg'
 import FavoriteIcon from '../../assets/favorite.svg'
 import BackIcon from '../../assets/back.svg'
 import NavPrevIcon from '../../assets/nav_prev.svg'
@@ -60,6 +61,9 @@ export default () => {
         stars: route.params.stars
     })
     const [loading, setLoading] = useState(false)
+    const [favorited, setFavorited] = useState(false)
+    const [selectedService, setSelected] = useState(null)
+    const [showModal, setShowModal] = useState(false)
 
     useEffect(() => {
         const getBarberInfo = async () => {
@@ -68,6 +72,7 @@ export default () => {
             let json = await Api.getBarber(userInfo.id)
             if(json.error == '') {
                 setUserInfo(json.data)
+                setFavorited(json.data.favorited)
             } else {
                 alert("Erro: "+json.error)
             }
@@ -80,6 +85,16 @@ export default () => {
     const handleBackButton = () => {
         navigation.goBack()
 
+    }
+
+    const handleFavClick = () => {
+        setFavorited( !favorited )
+        Api.setFavorite( userInfo.id )
+    }
+
+    const handleServiceChoose = (key) => {
+        setSelectedService(key)
+        setShowModal(true)
     }
 
     return (
@@ -109,8 +124,12 @@ export default () => {
                             <UserInfoName>{userInfo.name}</UserInfoName>
                             <Stars stars={userInfo.stars} showNumber={true} />
                         </UserInfo>
-                        <UserFavButton>
-                            <FavoriteIcon width="24" heigth="24" fill="#FF0000" />
+                        <UserFavButton onPress={handleFavClick}>
+                            {favorited ? 
+                                <FavoriteFullIcon width="24" heigth="24" fill="#FF0000" />
+                                :
+                                <FavoriteIcon width="24" heigth="24" fill="#FF0000" />
+                             }
                         </UserFavButton>
                     </UserInfoArea>
 
@@ -128,7 +147,7 @@ export default () => {
                                         <ServiceName>{item.name}</ServiceName>
                                         <ServicePrice>R$ {item.price}</ServicePrice>
                                     </ServiceInfo>
-                                    <ServiceChooseButton>
+                                    <ServiceChooseButton onPress={()=>handleServiceChoose(key)}>
                                         <ServiceChooseBtnText>Agendar</ServiceChooseBtnText>
                                     </ServiceChooseButton>
                                 </ServiceItem>
