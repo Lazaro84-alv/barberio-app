@@ -4,6 +4,7 @@ import { useNavigation, useRoute } from '@react-navigation/native'
 import Swiper from 'react-native-swiper'
 
 import Stars from '../../components/Stars'
+import BarberModal from '../../components/BarberModal'
 
 import FavoriteFullIcon from '../../assets/favorite_full.svg'
 import FavoriteIcon from '../../assets/favorite.svg'
@@ -62,7 +63,7 @@ export default () => {
     })
     const [loading, setLoading] = useState(false)
     const [favorited, setFavorited] = useState(false)
-    const [selectedService, setSelected] = useState(null)
+    const [selectedService, setSelectedService] = useState(null)
     const [showModal, setShowModal] = useState(false)
 
     useEffect(() => {
@@ -145,7 +146,7 @@ export default () => {
                                 <ServiceItem key={key}>
                                     <ServiceInfo>
                                         <ServiceName>{item.name}</ServiceName>
-                                        <ServicePrice>R$ {item.price}</ServicePrice>
+                                        <ServicePrice>R$ {item.price.toFixed(2)}</ServicePrice>
                                     </ServiceInfo>
                                     <ServiceChooseButton onPress={()=>handleServiceChoose(key)}>
                                         <ServiceChooseBtnText>Agendar</ServiceChooseBtnText>
@@ -179,6 +180,13 @@ export default () => {
             <BackButton onPress={handleBackButton}>
                 <BackIcon width="44" heigth="44" fill="#FFFFFF" />
             </BackButton>
+
+            <BarberModal 
+                show={showModal}
+                setShow={setShowModal}
+                user={userInfo}
+                service={selectedService}
+            />
         </Container>
     )
 }
