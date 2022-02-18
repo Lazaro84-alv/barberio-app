@@ -74,6 +74,7 @@ export default () => {
             if(json.error == '') {
                 setUserInfo(json.data)
                 setFavorited(json.data.favorited)
+                
             } else {
                 alert("Erro: "+json.error)
             }
